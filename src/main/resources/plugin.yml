@@ -1,7 +1,0 @@
-name: NametagHiderPlus
-version: '1.0'
-main: org.demonuk.nametaghiderplus.NametagHiderPlus
-api-version: 1.19
-commands:
-  nthider: {
-  }
