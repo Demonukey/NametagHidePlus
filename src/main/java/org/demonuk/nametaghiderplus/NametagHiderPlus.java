@@ -70,7 +70,7 @@ public final class NametagHiderPlus extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        tellConsole(MAIN_PREFIX + " E");
+        tellConsole(MAIN_PREFIX + " Bye!");
     }
     private void debugModeCheck() {
         try {

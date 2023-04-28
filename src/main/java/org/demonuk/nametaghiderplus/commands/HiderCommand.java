@@ -6,9 +6,7 @@ import org.bukkit.scoreboard.Team;
 import org.demonuk.nametaghiderplus.NametagHiderPlus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +23,7 @@ public class HiderCommand extends CommandAbstract {
     @Override
     public void execute(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("nametagHiderPlus.admin")) {
-            sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + Arrays.toString(" Вы не владете божественной магией, а потому не сможете применить эту команду.".getBytes(StandardCharsets.UTF_8)));
+            sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + "You are not allowed to use this command");
             return;
         }
         if (args.length == 0) {
@@ -69,9 +67,9 @@ public class HiderCommand extends CommandAbstract {
     }
 
     private void helpCommand(CommandSender sender) {
-        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fКоманды:");
-        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §f/hider reload - перезагрузить плагин");
-        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §f/hider hide - скрывать ники игроков");
-        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §f/hider show - показывать ники игроков");
+        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fCommands:");
+        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §f/hider reload - reloads configuration, currently is useless.");
+        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §f/hider hide - hides players' nicknames");
+        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §f/hider show - shows players' nicknames");
     }
 }
