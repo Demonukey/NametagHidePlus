@@ -1,9 +1,8 @@
 package org.demonuk.nametaghiderplus.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
 import org.demonuk.nametaghiderplus.NametagHiderPlus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,12 +12,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.demonuk.nametaghiderplus.NametagHiderPlus.instance;
+
 
 public class HiderCommand extends CommandAbstract {
 
 
     public HiderCommand() {
-        super("hider");
+        super("nthider");
     }
 
     @Override
@@ -33,54 +34,44 @@ public class HiderCommand extends CommandAbstract {
         }
         if (args[0].equalsIgnoreCase("reload")) {
             NametagHiderPlus.getInstance().reloadConfig();
-            sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + "§7] §fConfig reloaded!");
+            sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fConfig reloaded!");
         } else if (args[0].equalsIgnoreCase("hide")) {
-            Bukkit.getOnlinePlayers().forEach(player -> {
-                if (NametagHiderPlus.getInstance().team.getEntries().contains(player.getName())) {
-                    NametagHiderPlus.getInstance().team.addEntry(player.getName());
-                    if (NametagHiderPlus.getInstance().debugMode) {
-                        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + "§7] §fPlayer's " + player.getName() + " nickname is hidden!");
-                    }
-                }
-            });
+            if (instance.hideNicknames) {
+                sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fNicknames are already hidden!");
+                return;
+            }
+            sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fNicknames are now hidden!");
+            instance.hideNicknames = true;
+            instance.team.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
         } else if (args[0].equalsIgnoreCase("show")) {
-            Bukkit.getOnlinePlayers().forEach(player -> {
-                if (NametagHiderPlus.getInstance().team.getEntries().contains(player.getName())) {
-                    NametagHiderPlus.getInstance().team.removeEntry(player.getName());
-                    if (NametagHiderPlus.getInstance().debugMode) {
-                        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + "§7] §fPlayer's " + player.getName() + " nickname is hidden!");
-                    }
-                }
-            });
+            if (!instance.hideNicknames) {
+                sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fNicknames are already shown!");
+                return;
+            }
+            sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fNicknames are now shown!");
+            instance.hideNicknames = false;
+            instance.team.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
         }
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player)) {
-            return null;
-        }
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
-            completions.add("reload");
             completions.add("hide");
+            completions.add("reload");
             completions.add("show");
             return completions.stream()
                     .filter(completion -> completion.startsWith(args[0]))
-                    .collect(Collectors.toList());
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("reset")) {
-            return Bukkit.getOnlinePlayers().stream()
-                    .map(Player::getName)
-                    .filter(name -> name.startsWith(args[1]))
                     .collect(Collectors.toList());
         }
         return null;
     }
 
     private void helpCommand(CommandSender sender) {
-        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + "§7] §fКоманды:");
-        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + "§7] §f/hider reload - перезагрузить плагин");
-        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + "§7] §f/hider hide - скрыть ники игроков");
-        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + "§7] §f/hider hide - скрыть ники игроков");
+        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fКоманды:");
+        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §f/hider reload - перезагрузить плагин");
+        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §f/hider hide - скрывать ники игроков");
+        sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §f/hider show - показывать ники игроков");
     }
 }

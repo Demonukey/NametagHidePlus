@@ -1,14 +1,14 @@
 package org.demonuk.nametaghiderplus.commands;
 
 import org.bukkit.command.*;
-import org.demonuk.nametaghiderplus.NametagHiderPlus;
 import org.jetbrains.annotations.NotNull;
+
+import static org.demonuk.nametaghiderplus.NametagHiderPlus.instance;
 
 public abstract class CommandAbstract implements CommandExecutor, TabCompleter {
 
-
     public CommandAbstract(String command) {
-        PluginCommand pluginCommand = NametagHiderPlus.getInstance().getCommand(command);
+        PluginCommand pluginCommand = instance.getCommand(command);
         if(pluginCommand != null) {
             pluginCommand.setExecutor(this);
         }

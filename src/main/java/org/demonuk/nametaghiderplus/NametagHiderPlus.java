@@ -8,8 +8,6 @@ import org.bukkit.scoreboard.Team;
 import org.demonuk.nametaghiderplus.commands.HiderCommand;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Objects;
 
 public final class NametagHiderPlus extends JavaPlugin {
@@ -20,6 +18,8 @@ public final class NametagHiderPlus extends JavaPlugin {
 
     public boolean debugMode;
 
+    public boolean hideNicknames;
+
     public static NametagHiderPlus instance;
 
     public NametagHiderPlus() {
@@ -29,15 +29,17 @@ public final class NametagHiderPlus extends JavaPlugin {
     public static NametagHiderPlus getInstance() {
         return instance;
     }
-    public static final String MAIN_PREFIX = ChatColor.GRAY + "[" + ChatColor.DARK_GREEN + Arrays.toString("NametagHider+".getBytes(StandardCharsets.UTF_8)) + ChatColor.GRAY + "]";
+    public static final String MAIN_PREFIX = ChatColor.GRAY + "[" + ChatColor.DARK_GREEN + "NametagHider+" + ChatColor.GRAY + "]";
 
     public static void tellConsole(String message) {
         Bukkit.getConsoleSender().sendMessage(message);
     }
     @Override
     public void onEnable() {
+        instance = this;
         // Plugin startup logic
         new HiderCommand();
+        getServer().getPluginManager().registerEvents(new Hider(), this);
     tellConsole("NametagHider+ is loaded successfully!");
         File configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()) {
@@ -47,13 +49,19 @@ public final class NametagHiderPlus extends JavaPlugin {
             debugModeCheck();
         }
         scoreboard = getServer().getScoreboardManager().getMainScoreboard();
-        team = scoreboard.registerNewTeam("invisible");
-        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+        if (!scoreboard.getTeams().contains(scoreboard.getTeam("NameTagHider+"))) {
+            team = scoreboard.registerNewTeam("NameTagHider+");
+            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+        } else
+            team = scoreboard.getTeam("NameTagHider+");
         if (Objects.requireNonNull(getConfig().getString("hideNicknames")).equalsIgnoreCase("true")) {
             tellConsole(MAIN_PREFIX + " Hide nicknames is enabled!");
-            getServer().getPluginManager().registerEvents(new Hider(), this);
+            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+            hideNicknames = true;
         } else if (Objects.requireNonNull(getConfig().getString("hideNicknames")).equalsIgnoreCase("false")) {
             tellConsole(MAIN_PREFIX + " Hide nicknames is disabled!");
+            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+            hideNicknames = false;
         } else {
             tellConsole(MAIN_PREFIX + " Error while checking for hide nicknames!");
             tellConsole(MAIN_PREFIX + " Hide nicknames automatically disabled for further investigation!");
@@ -62,7 +70,7 @@ public final class NametagHiderPlus extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        tellConsole(MAIN_PREFIX + " E");
     }
     private void debugModeCheck() {
         try {
