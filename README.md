@@ -15,7 +15,8 @@ Features
 To install this plugin, follow these steps:
 
     Download the latest version from the releases page.
-    Copy the NametagHidePlus_version.jar file into the plugins folder of your Minecraft server, make sure to use the lastest version tagged with "Release".
+    Copy the NametagHidePlus_version.jar file into the plugins folder of your Minecraft server,
+    make sure to use the lastest version tagged with "Release".
     (Currently available for 1.19.x only)
     Restart the server to load the plugin.
 
