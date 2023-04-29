@@ -1,4 +1,4 @@
-# NametagHider+ Plugin
+# NametagHide+ Plugin
 
 This is a Minecraft 1.19.X plugin named "NametagHider+" that allows you to hide player's nicknames and enable/disable nametags with commands.
 Features
