@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.demonuk.nametaghiderplus.NametagHiderPlus.instance;
@@ -33,6 +34,18 @@ public class HiderCommand extends CommandAbstract {
         if (args[0].equalsIgnoreCase("reload")) {
             NametagHiderPlus.getInstance().reloadConfig();
             sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fConfig reloaded!");
+            if (Objects.requireNonNull(instance.getConfig().getString("hideNicknames")).equalsIgnoreCase("true")) {
+                instance.hideNicknames = true;
+                instance.team.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+            } else if (Objects.requireNonNull(instance.getConfig().getString("hideNicknames")).equalsIgnoreCase("false")) {
+                instance.hideNicknames = false;
+                instance.team.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+            } else {
+                instance.hideNicknames = true;
+                instance.team.setOption(org.bukkit.scoreboard.Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+                sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fConfig error! Please check your config.yml file!");
+                sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fHide nicknames is now enabled for safety reasons!");
+        }
         } else if (args[0].equalsIgnoreCase("hide")) {
             if (instance.hideNicknames) {
                 sender.sendMessage(NametagHiderPlus.MAIN_PREFIX + " §fNicknames are already hidden!");

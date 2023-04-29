@@ -1,2 +1,2 @@
 debug: false # Debug mode (Use only true or false, else it will cause exceptions). False by default.
-hideNicknames: true # Hide nicknames in chat, use only true or false. False by default.
+hideNicknames: true # Hide nicknames in chat, use only true or false. False by default.hide
