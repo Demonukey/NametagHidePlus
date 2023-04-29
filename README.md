@@ -20,8 +20,10 @@ To install this plugin, follow these steps:
     Restart the server to load the plugin.
 
 # Usage
+Check out your configuration file and change the "hideNicknames" value to "true" or type a command listed below.
+Then, to reveal the nickname of a player you would need to right click them and the nickname will appear in your actionbar.
 
-To use this plugin, you need to have the appropriate permissions. Once you have the permissions, you can use the following commands:
+To use this plugin's commands, you need to have the appropriate permissions. Once you have the permissions, you can use the following commands:
 
     /nthider show - shows the nametags for all players
     /nthider hide - hides the nametags for all players
